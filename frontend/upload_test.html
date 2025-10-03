@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>Test Customer Profile Upload with JWT</h2>
+
+<input type="file" id="fileInput" />
+<button onclick="uploadFile()">Upload</button>
+
+<script>
+    const jwtToken = "eyJhbGciOiJIUzI1NiJ9.KPUau_z4ildCdZq-B2shH0nXIfJcRantDaiuueyGIXE"; // replace with your JWT
+
+    function uploadFile() {
+        const fileInput = document.getElementById("fileInput");
+        if (fileInput.files.length === 0) {
+            alert("Please select a file first!");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", fileInput.files[0]);
+
+        fetch("http://localhost:8080/api/v1/customers/30/profile-image", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${jwtToken}`
+            },
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Success:", data);
+                alert("Upload successful!");
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Upload failed. Check console.");
+            });
+    }
+</script>
+
+</body>
+</html>
