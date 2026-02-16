@@ -50,7 +50,7 @@ public class ItemService {
                 .collect(Collectors.toList());
     }
 
-    public ItemDTO getItemById(Integer id) {
+    public ItemDTO getItemById(Long id) {
         return itemRepository.findById(id)
                 .map(itemDTOMapper)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -58,8 +58,8 @@ public class ItemService {
                 ));
     }
 
-    public List<ItemDTO> getItemsBySellerId(Integer sellerId) {
-        if (!customerRepository.existsById(sellerId)) {
+    public List<ItemDTO> getItemsBySellerId(Long sellerId) {
+        if (!customerRepository.existsById(sellerId.intValue())) {
             throw new ResourceNotFoundException(
                     "Seller with id [%s] not found".formatted(sellerId)
             );
@@ -91,8 +91,8 @@ public class ItemService {
                 .collect(Collectors.toList());
     }
 
-    public ItemDTO createItem(Integer sellerId, ItemRegistrationRequest request) {
-        Customer seller = customerRepository.findById(sellerId)
+    public ItemDTO createItem(Long sellerId, ItemRegistrationRequest request) {
+        Customer seller = customerRepository.findById(sellerId.intValue())
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Seller with id [%s] not found".formatted(sellerId)
                 ));
@@ -109,7 +109,7 @@ public class ItemService {
         return itemDTOMapper.apply(savedItem);
     }
 
-    public ItemDTO updateItem(Integer itemId, ItemUpdateRequest updateRequest) {
+    public ItemDTO updateItem(Long itemId, ItemUpdateRequest updateRequest) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Item with id [%s] not found".formatted(itemId)
@@ -150,7 +150,7 @@ public class ItemService {
         return itemDTOMapper.apply(updatedItem);
     }
 
-    public void deleteItem(Integer itemId) {
+    public void deleteItem(Long itemId) {
         if (!itemRepository.existsById(itemId)) {
             throw new ResourceNotFoundException(
                     "Item with id [%s] not found".formatted(itemId)
@@ -159,7 +159,7 @@ public class ItemService {
         itemRepository.deleteById(itemId);
     }
 
-    public void uploadItemImage(Integer itemId, MultipartFile file) {
+    public void uploadItemImage(Long itemId, MultipartFile file) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Item with id [%s] not found".formatted(itemId)
@@ -180,7 +180,7 @@ public class ItemService {
         itemRepository.save(item);
     }
 
-    public byte[] getItemImage(Integer itemId) {
+    public byte[] getItemImage(Long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Item with id [%s] not found".formatted(itemId)
@@ -198,7 +198,7 @@ public class ItemService {
         );
     }
 
-    public void markItemAsSold(Integer itemId) {
+    public void markItemAsSold(Long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Item with id [%s] not found".formatted(itemId)
@@ -207,7 +207,7 @@ public class ItemService {
         itemRepository.save(item);
     }
 
-    public void markItemAsAvailable(Integer itemId) {
+    public void markItemAsAvailable(Long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Item with id [%s] not found".formatted(itemId)

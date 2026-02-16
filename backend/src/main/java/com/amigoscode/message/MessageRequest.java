@@ -2,7 +2,7 @@ package com.amigoscode.message;
 
 public record MessageRequest(
         Integer receiverId,
-        Integer itemId,
+        Long itemId,
         String content
 ) {
 }

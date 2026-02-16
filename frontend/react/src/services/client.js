@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+export const getAuthToken = () => localStorage.getItem("access_token");
+
 const getAuthConfig = () => ({
     headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`

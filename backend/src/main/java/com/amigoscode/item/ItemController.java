@@ -30,13 +30,13 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ResponseEntity<ItemDTO> getItem(@PathVariable("itemId") Integer itemId) {
+    public ResponseEntity<ItemDTO> getItem(@PathVariable("itemId") Long itemId) {
         return ResponseEntity.ok(itemService.getItemById(itemId));
     }
 
     @GetMapping("/seller/{sellerId}")
     public ResponseEntity<List<ItemDTO>> getItemsBySeller(
-            @PathVariable("sellerId") Integer sellerId) {
+            @PathVariable("sellerId") Long sellerId) {
         return ResponseEntity.ok(itemService.getItemsBySellerId(sellerId));
     }
 
@@ -61,7 +61,7 @@ public class ItemController {
 
     @PostMapping("/seller/{sellerId}")
     public ResponseEntity<ItemDTO> createItem(
-            @PathVariable("sellerId") Integer sellerId,
+            @PathVariable("sellerId") Long sellerId,
             @RequestBody ItemRegistrationRequest request) {
         ItemDTO item = itemService.createItem(sellerId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(item);
@@ -69,14 +69,14 @@ public class ItemController {
 
     @PutMapping("/{itemId}")
     public ResponseEntity<ItemDTO> updateItem(
-            @PathVariable("itemId") Integer itemId,
+            @PathVariable("itemId") Long itemId,
             @RequestBody ItemUpdateRequest updateRequest) {
         ItemDTO updatedItem = itemService.updateItem(itemId, updateRequest);
         return ResponseEntity.ok(updatedItem);
     }
 
     @DeleteMapping("/{itemId}")
-    public ResponseEntity<Void> deleteItem(@PathVariable("itemId") Integer itemId) {
+    public ResponseEntity<Void> deleteItem(@PathVariable("itemId") Long itemId) {
         itemService.deleteItem(itemId);
         return ResponseEntity.noContent().build();
     }
@@ -86,7 +86,7 @@ public class ItemController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
     public ResponseEntity<Void> uploadItemImage(
-            @PathVariable("itemId") Integer itemId,
+            @PathVariable("itemId") Long itemId,
             @RequestParam("file") MultipartFile file) {
         itemService.uploadItemImage(itemId, file);
         return ResponseEntity.ok().build();
@@ -96,19 +96,19 @@ public class ItemController {
             value = "/{itemId}/image",
             produces = MediaType.IMAGE_JPEG_VALUE
     )
-    public ResponseEntity<byte[]> getItemImage(@PathVariable("itemId") Integer itemId) {
+    public ResponseEntity<byte[]> getItemImage(@PathVariable("itemId") Long itemId) {
         byte[] image = itemService.getItemImage(itemId);
         return ResponseEntity.ok(image);
     }
 
     @PatchMapping("/{itemId}/mark-sold")
-    public ResponseEntity<Void> markItemAsSold(@PathVariable("itemId") Integer itemId) {
+    public ResponseEntity<Void> markItemAsSold(@PathVariable("itemId") Long itemId) {
         itemService.markItemAsSold(itemId);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{itemId}/mark-available")
-    public ResponseEntity<Void> markItemAsAvailable(@PathVariable("itemId") Integer itemId) {
+    public ResponseEntity<Void> markItemAsAvailable(@PathVariable("itemId") Long itemId) {
         itemService.markItemAsAvailable(itemId);
         return ResponseEntity.ok().build();
     }

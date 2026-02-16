@@ -25,19 +25,19 @@ public class FavoriteController {
     @GetMapping("/check")
     public ResponseEntity<Boolean> isFavorited(
             @RequestParam("customerId") Integer customerId,
-            @RequestParam("itemId") Integer itemId) {
+            @RequestParam("itemId") Long itemId) {
         return ResponseEntity.ok(favoriteService.isItemFavorited(customerId, itemId));
     }
 
     @GetMapping("/count/{itemId}")
-    public ResponseEntity<Long> getFavoriteCount(@PathVariable("itemId") Integer itemId) {
+    public ResponseEntity<Long> getFavoriteCount(@PathVariable("itemId") Long itemId) {
         return ResponseEntity.ok(favoriteService.getFavoriteCountForItem(itemId));
     }
 
     @PostMapping
     public ResponseEntity<FavoriteDTO> addFavorite(
             @RequestParam("customerId") Integer customerId,
-            @RequestParam("itemId") Integer itemId) {
+            @RequestParam("itemId") Long itemId) {
         FavoriteDTO favorite = favoriteService.addFavorite(customerId, itemId);
         return ResponseEntity.status(HttpStatus.CREATED).body(favorite);
     }
@@ -45,7 +45,7 @@ public class FavoriteController {
     @DeleteMapping
     public ResponseEntity<Void> removeFavorite(
             @RequestParam("customerId") Integer customerId,
-            @RequestParam("itemId") Integer itemId) {
+            @RequestParam("itemId") Long itemId) {
         favoriteService.removeFavorite(customerId, itemId);
         return ResponseEntity.noContent().build();
     }
@@ -53,7 +53,7 @@ public class FavoriteController {
     @PostMapping("/toggle")
     public ResponseEntity<Void> toggleFavorite(
             @RequestParam("customerId") Integer customerId,
-            @RequestParam("itemId") Integer itemId) {
+            @RequestParam("itemId") Long itemId) {
         favoriteService.toggleFavorite(customerId, itemId);
         return ResponseEntity.ok().build();
     }

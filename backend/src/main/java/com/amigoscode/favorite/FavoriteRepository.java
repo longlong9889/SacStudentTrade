@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface FavoriteRepository extends JpaRepository<Favorite, Integer> {
+public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
 
     // Find all favorites for a customer
     @Query("SELECT f FROM Favorite f WHERE f.customer.id = :customerId ORDER BY f.createdAt DESC")
@@ -17,19 +17,19 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Integer> {
     @Query("SELECT CASE WHEN COUNT(f) > 0 THEN true ELSE false END FROM Favorite f " +
             "WHERE f.customer.id = :customerId AND f.item.id = :itemId")
     boolean existsByCustomerIdAndItemId(@Param("customerId") Integer customerId,
-                                        @Param("itemId") Integer itemId);
+                                        @Param("itemId") Long itemId);
 
     // Find specific favorite by customer and item
     @Query("SELECT f FROM Favorite f WHERE f.customer.id = :customerId AND f.item.id = :itemId")
     Optional<Favorite> findByCustomerIdAndItemId(@Param("customerId") Integer customerId,
-                                                 @Param("itemId") Integer itemId);
+                                                 @Param("itemId") Long itemId);
 
     // Count favorites for an item
     @Query("SELECT COUNT(f) FROM Favorite f WHERE f.item.id = :itemId")
-    Long countByItemId(@Param("itemId") Integer itemId);
+    Long countByItemId(@Param("itemId") Long itemId);
 
     // Delete favorite by customer and item
     @Query("DELETE FROM Favorite f WHERE f.customer.id = :customerId AND f.item.id = :itemId")
     void deleteByCustomerIdAndItemId(@Param("customerId") Integer customerId,
-                                     @Param("itemId") Integer itemId);
+                                     @Param("itemId") Long itemId);
 }

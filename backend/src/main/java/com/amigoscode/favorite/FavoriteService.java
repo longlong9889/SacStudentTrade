@@ -42,11 +42,11 @@ public class FavoriteService {
                 .collect(Collectors.toList());
     }
 
-    public boolean isItemFavorited(Integer customerId, Integer itemId) {
+    public boolean isItemFavorited(Integer customerId, Long itemId) {
         return favoriteRepository.existsByCustomerIdAndItemId(customerId, itemId);
     }
 
-    public Long getFavoriteCountForItem(Integer itemId) {
+    public Long getFavoriteCountForItem(Long itemId) {
         if (!itemRepository.existsById(itemId)) {
             throw new ResourceNotFoundException(
                     "Item with id [%s] not found".formatted(itemId)
@@ -56,7 +56,7 @@ public class FavoriteService {
     }
 
     @Transactional
-    public FavoriteDTO addFavorite(Integer customerId, Integer itemId) {
+    public FavoriteDTO addFavorite(Integer customerId, Long itemId) {
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Customer with id [%s] not found".formatted(customerId)
@@ -79,7 +79,7 @@ public class FavoriteService {
     }
 
     @Transactional
-    public void removeFavorite(Integer customerId, Integer itemId) {
+    public void removeFavorite(Integer customerId, Long itemId) {
         Favorite favorite = favoriteRepository.findByCustomerIdAndItemId(customerId, itemId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Favorite not found for customer [%s] and item [%s]"
@@ -89,7 +89,7 @@ public class FavoriteService {
     }
 
     @Transactional
-    public void toggleFavorite(Integer customerId, Integer itemId) {
+    public void toggleFavorite(Integer customerId, Long itemId) {
         if (favoriteRepository.existsByCustomerIdAndItemId(customerId, itemId)) {
             removeFavorite(customerId, itemId);
         } else {

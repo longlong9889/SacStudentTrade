@@ -7,11 +7,11 @@ import org.springframework.data.repository.query.Param;
 import java.math.BigDecimal;
 import java.util.List;
 
-public interface ItemRepository extends JpaRepository<Item, Integer> {
+public interface ItemRepository extends JpaRepository<Item, Long> {
 
     // Find items by seller ID
     @Query("SELECT i FROM Item i WHERE i.seller.id = :sellerId")
-    List<Item> findAllBySellerId(@Param("sellerId") Integer sellerId);
+    List<Item> findAllBySellerId(@Param("sellerId") Long sellerId);
 
     // Find items by category
     List<Item> findByCategory(String category);
@@ -39,5 +39,5 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
     // Find available items by seller
     @Query("SELECT i FROM Item i WHERE i.seller.id = :sellerId AND i.status = 'AVAILABLE'")
-    List<Item> findAvailableItemsBySellerId(@Param("sellerId") Integer sellerId);
+    List<Item> findAvailableItemsBySellerId(@Param("sellerId") Long sellerId);
 }

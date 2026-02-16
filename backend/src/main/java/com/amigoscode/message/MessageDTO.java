@@ -3,12 +3,12 @@ package com.amigoscode.message;
 import java.time.LocalDateTime;
 
 public record MessageDTO(
-        Integer id,
+        Long id,
         Integer senderId,
         String senderName,
         Integer receiverId,
         String receiverName,
-        Integer itemId,
+        Long itemId,
         String itemTitle,
         String content,
         Boolean isRead,

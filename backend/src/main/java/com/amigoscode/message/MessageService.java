@@ -105,7 +105,7 @@ public class MessageService {
     }
 
     @Transactional
-    public void markAsRead(Integer messageId) {
+    public void markAsRead(Long messageId) {
         Message message = messageRepository.findById(messageId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Message with id [%s] not found".formatted(messageId)
@@ -123,7 +123,7 @@ public class MessageService {
         messageRepository.saveAll(messages);
     }
 
-    public void deleteMessage(Integer messageId) {
+    public void deleteMessage(Long messageId) {
         if (!messageRepository.existsById(messageId)) {
             throw new ResourceNotFoundException(
                     "Message with id [%s] not found".formatted(messageId)

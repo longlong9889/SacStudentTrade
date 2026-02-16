@@ -16,7 +16,7 @@ public class ItemDTOMapper implements Function<Item, ItemDTO> {
                 item.getCategory(),
                 item.getImageId(),
                 item.getStatus(),
-                item.getSeller().getId(),
+                item.getSeller().getId().longValue(),
                 item.getSeller().getName(),
                 item.getSeller().getEmail(),
                 item.getCreatedAt(),

@@ -50,7 +50,7 @@ public class MessageController {
     }
 
     @PatchMapping("/{messageId}/read")
-    public ResponseEntity<Void> markAsRead(@PathVariable("messageId") Integer messageId) {
+    public ResponseEntity<Void> markAsRead(@PathVariable("messageId") Long messageId) {
         messageService.markAsRead(messageId);
         return ResponseEntity.ok().build();
     }
@@ -64,7 +64,7 @@ public class MessageController {
     }
 
     @DeleteMapping("/{messageId}")
-    public ResponseEntity<Void> deleteMessage(@PathVariable("messageId") Integer messageId) {
+    public ResponseEntity<Void> deleteMessage(@PathVariable("messageId") Long messageId) {
         messageService.deleteMessage(messageId);
         return ResponseEntity.noContent().build();
     }

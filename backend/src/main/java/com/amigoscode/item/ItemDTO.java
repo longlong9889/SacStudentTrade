@@ -4,14 +4,14 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record ItemDTO(
-        Integer id,
+        Long id,
         String title,
         String description,
         BigDecimal price,
         String category,
         String imageId,
         ItemStatus status,
-        Integer sellerId,
+        Long sellerId,
         String sellerName,
         String sellerEmail,
         LocalDateTime createdAt,

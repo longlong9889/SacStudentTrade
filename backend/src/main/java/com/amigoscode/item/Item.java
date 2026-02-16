@@ -20,7 +20,7 @@ public class Item {
             strategy = GenerationType.SEQUENCE,
             generator = "item_id_seq"
     )
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false)
     private String title;
@@ -75,7 +75,7 @@ public class Item {
         this.status = ItemStatus.AVAILABLE;
     }
 
-    public Item(Integer id, String title, String description, BigDecimal price,
+    public Item(Long id, String title, String description, BigDecimal price,
                 String category, Customer seller, ItemStatus status, String imageId) {
         this.id = id;
         this.title = title;
@@ -88,11 +88,11 @@ public class Item {
     }
 
     // Getters and Setters
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

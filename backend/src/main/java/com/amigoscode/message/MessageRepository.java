@@ -6,7 +6,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface MessageRepository extends JpaRepository<Message, Integer> {
+public interface MessageRepository extends JpaRepository<Message, Long> {
 
     // Get all messages for a user (sent or received)
     @Query("SELECT m FROM Message m WHERE m.sender.id = :userId OR m.receiver.id = :userId ORDER BY m.createdAt DESC")
@@ -22,7 +22,7 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
 
     // Get messages about specific item
     @Query("SELECT m FROM Message m WHERE m.item.id = :itemId ORDER BY m.createdAt DESC")
-    List<Message> findByItemId(@Param("itemId") Integer itemId);
+    List<Message> findByItemId(@Param("itemId") Long itemId);
 
     // Get unread messages for a user
     @Query("SELECT m FROM Message m WHERE m.receiver.id = :userId AND m.isRead = false ORDER BY m.createdAt DESC")
