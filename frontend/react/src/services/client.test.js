@@ -9,8 +9,27 @@ import {
   customerProfilePictureUrl
 } from './client'
 
-// Mock axios
-vi.mock('axios')
+// Mock axios.create to return a mock instance
+const { mockAxiosInstance } = vi.hoisted(() => {
+  const mockAxiosInstance = {
+    get: vi.fn(),
+    post: vi.fn(),
+    put: vi.fn(),
+    delete: vi.fn(),
+    patch: vi.fn(),
+    interceptors: {
+      request: { use: vi.fn() },
+      response: { use: vi.fn() },
+    },
+  }
+  return { mockAxiosInstance }
+})
+
+vi.mock('axios', () => ({
+  default: {
+    create: vi.fn(() => mockAxiosInstance),
+  },
+}))
 
 describe('Client Service', () => {
   beforeEach(() => {
@@ -19,27 +38,22 @@ describe('Client Service', () => {
   })
 
   describe('getCustomers', () => {
-    it('should fetch customers with auth header', async () => {
+    it('should fetch customers', async () => {
       const mockCustomers = [
         { id: 1, name: 'John', email: 'john@test.com' },
         { id: 2, name: 'Jane', email: 'jane@test.com' }
       ]
-      axios.get.mockResolvedValue({ data: mockCustomers })
+      mockAxiosInstance.get.mockResolvedValue({ data: mockCustomers })
 
       const result = await getCustomers()
 
-      expect(axios.get).toHaveBeenCalledWith(
-        expect.stringContaining('/api/v1/customers'),
-        expect.objectContaining({
-          headers: { Authorization: 'Bearer test-token' }
-        })
-      )
+      expect(mockAxiosInstance.get).toHaveBeenCalledWith('/api/v1/customers')
       expect(result.data).toEqual(mockCustomers)
     })
 
     it('should throw error when fetch fails', async () => {
       const error = new Error('Network Error')
-      axios.get.mockRejectedValue(error)
+      mockAxiosInstance.get.mockRejectedValue(error)
 
       await expect(getCustomers()).rejects.toThrow('Network Error')
     })
@@ -54,12 +68,12 @@ describe('Client Service', () => {
         age: 25,
         gender: 'MALE'
       }
-      axios.post.mockResolvedValue({ data: { ...newCustomer, id: 1 } })
+      mockAxiosInstance.post.mockResolvedValue({ data: { ...newCustomer, id: 1 } })
 
       const result = await saveCustomer(newCustomer)
 
-      expect(axios.post).toHaveBeenCalledWith(
-        expect.stringContaining('/api/v1/customers'),
+      expect(mockAxiosInstance.post).toHaveBeenCalledWith(
+        '/api/v1/customers',
         newCustomer
       )
       expect(result.data).toHaveProperty('id')
@@ -67,33 +81,27 @@ describe('Client Service', () => {
   })
 
   describe('updateCustomer', () => {
-    it('should update customer with auth header', async () => {
+    it('should update customer', async () => {
       const update = { name: 'Updated Name' }
-      axios.put.mockResolvedValue({ data: { id: 1, ...update } })
+      mockAxiosInstance.put.mockResolvedValue({ data: { id: 1, ...update } })
 
       await updateCustomer(1, update)
 
-      expect(axios.put).toHaveBeenCalledWith(
-        expect.stringContaining('/api/v1/customers/1'),
-        update,
-        expect.objectContaining({
-          headers: { Authorization: 'Bearer test-token' }
-        })
+      expect(mockAxiosInstance.put).toHaveBeenCalledWith(
+        '/api/v1/customers/1',
+        update
       )
     })
   })
 
   describe('deleteCustomer', () => {
-    it('should delete customer with auth header', async () => {
-      axios.delete.mockResolvedValue({ data: {} })
+    it('should delete customer', async () => {
+      mockAxiosInstance.delete.mockResolvedValue({ data: {} })
 
       await deleteCustomer(1)
 
-      expect(axios.delete).toHaveBeenCalledWith(
-        expect.stringContaining('/api/v1/customers/1'),
-        expect.objectContaining({
-          headers: { Authorization: 'Bearer test-token' }
-        })
+      expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
+        '/api/v1/customers/1'
       )
     })
   })
@@ -107,12 +115,12 @@ describe('Client Service', () => {
           customerDTO: { id: 1, name: 'Test', email: 'test@test.com' }
         }
       }
-      axios.post.mockResolvedValue(mockResponse)
+      mockAxiosInstance.post.mockResolvedValue(mockResponse)
 
       const result = await login(credentials)
 
-      expect(axios.post).toHaveBeenCalledWith(
-        expect.stringContaining('/api/v1/auth/login'),
+      expect(mockAxiosInstance.post).toHaveBeenCalledWith(
+        '/api/v1/auth/login',
         credentials
       )
       expect(result.data).toHaveProperty('token')
@@ -121,7 +129,7 @@ describe('Client Service', () => {
     it('should throw error on invalid credentials', async () => {
       const credentials = { username: 'test@test.com', password: 'wrong' }
       const error = { response: { status: 401, data: { message: 'Invalid credentials' } } }
-      axios.post.mockRejectedValue(error)
+      mockAxiosInstance.post.mockRejectedValue(error)
 
       await expect(login(credentials)).rejects.toEqual(error)
     })
