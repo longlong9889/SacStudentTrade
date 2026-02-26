@@ -19,7 +19,8 @@ const AuthProvider = ({ children }) => {
             token = jwtDecode(token);
             setCustomer({
                 username: token.sub,
-                roles: token.scopes
+                roles: token.scopes,
+                id: token.customerId
             })
         }
     }
@@ -38,7 +39,8 @@ const AuthProvider = ({ children }) => {
 
                 setCustomer({
                     username: decodedToken.sub,
-                    roles: decodedToken.scopes
+                    roles: decodedToken.scopes,
+                    id:decodedToken.customerId
                 })
                 resolve(res);
             }).catch(err => {
