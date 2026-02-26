@@ -153,5 +153,13 @@ public class CustomerService {
         );
         return profileImage;
     }
+
+    public CustomerDTO getCustomerByEmail(String email) {
+        return customerDao.selectUserByEmail(email)
+                .map(customerDTOMapper)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "customer with email [%s] not found".formatted(email)
+                ));
+    }
 }
 

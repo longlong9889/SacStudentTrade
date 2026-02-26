@@ -1,5 +1,6 @@
 package com.amigoscode.auth;
 
+import java.util.Map;
 import com.amigoscode.customer.Customer;
 import com.amigoscode.customer.CustomerDTO;
 import com.amigoscode.customer.CustomerDTOMapper;
@@ -33,7 +34,7 @@ public class AuthenticationService {
         );
         Customer principal = (Customer) authentication.getPrincipal();
         CustomerDTO customerDTO = customerDTOMapper.apply(principal);
-        String token = jwtUtil.issueToken(customerDTO.username(), customerDTO.roles());
+        String token = jwtUtil.issueToken(customerDTO.username(), Map.of("scopes", customerDTO.roles(), "customerId", customerDTO.id()));
         return new AuthenticationResponse(token, customerDTO);
     }
 
